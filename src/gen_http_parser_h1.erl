@@ -101,7 +101,10 @@ encode_body(undefined) -> "";
 encode_body(stream) -> "";
 encode_body(Body) -> Body.
 
-validate_target(Target) -> validate_target(Target, Target).
+validate_target(Target) when is_list(Target) ->
+    validate_target(list_to_binary(Target));
+validate_target(Target) ->
+    validate_target(Target, Target).
 
 validate_target(<<$%, Char1, Char2, Rest/binary>>, OriginalTarget) when
     ?IS_HEX(Char1) andalso ?IS_HEX(Char2)
@@ -117,6 +120,8 @@ validate_target(<<Char, Rest/binary>>, OriginalTarget) ->
 validate_target(<<>>, _OriginalTarget) ->
     ok.
 
+validate_header_name(Name) when is_list(Name) ->
+    validate_header_name(list_to_binary(Name));
 validate_header_name(Name) ->
     [
         case is_tchar(Char) of
@@ -127,7 +132,11 @@ validate_header_name(Name) ->
     ],
     ok.
 
-validate_header_value(Name, Value) ->
+validate_header_value(Name, Value) when is_list(Name) ->
+    validate_header_value(list_to_binary(Name), Value);
+validate_header_value(Name, Value) when is_list(Value) ->
+    validate_header_value(Name, list_to_binary(Value));
+validate_header_value(Name, Value) when is_binary(Name) andalso is_binary(Value) ->
     [
         case is_vchar(Char) orelse Char =:= $\s orelse Char =:= $\t of
             true -> ok;
