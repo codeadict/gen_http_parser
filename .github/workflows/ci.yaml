@@ -1,18 +1,29 @@
+name: Erlang CI
+
 on:
   push:
-    branches:
-      - "main"
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
+
+env:
+  # Allow unicode output and enable features such as the maybe expression
+  ERL_AFLAGS: +pc unicode -enable-feature all
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+  LC_CTYPE: C.UTF-8
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    name: Tests
+  ci:
+    name: Run checks and tests on ${{matrix.otp_vsn}} and ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    container:
+      image: erlang:${{matrix.otp_vsn}}
+    strategy:
+      matrix:
+        otp_vsn: ['24.3', '25.3', '26.0.2', '27.0.1']
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: "25.0"
-          rebar3-version: "3"
-
-      - run: rebar3 eunit
+      - run: rebar3 test
+      - run: rebar3 dialyzer
