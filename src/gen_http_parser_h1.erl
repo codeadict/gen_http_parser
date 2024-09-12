@@ -141,7 +141,7 @@ validate_header_value(Name, Value) when is_binary(Name) andalso is_binary(Value)
             true -> ok;
             false -> throw({gen_http, {invalid_header_value, Name, Value}})
         end
-     || <<Char>> <= Name
+     || <<Char>> <= Value
     ],
     ok.
 
