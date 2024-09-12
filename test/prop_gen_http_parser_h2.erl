@@ -15,6 +15,35 @@
 end).
 
 %% -------------------------------------------------------------------
+%% DATA Packet
+%% -------------------------------------------------------------------
+
+prop_data_frame_no_padding() ->
+    ?FORALL(
+        {StreamId, Data},
+        {non_zero_stream_id(), binary()},
+        begin
+            ?assertRoundTrip(#data{stream_id = StreamId, flags = 16#00, data = Data}),
+            true
+        end
+    ).
+
+prop_data_frame_with_padding() ->
+    ?FORALL(
+        {StreamId, Data, Padding},
+        {non_zero_stream_id(), binary(), binary()},
+        begin
+            ?assertRoundTrip(#data{
+                stream_id = StreamId,
+                flags = 16#08,
+                data = Data,
+                padding = Padding
+            }),
+            true
+        end
+    ).
+
+%% -------------------------------------------------------------------
 %% PRIORITY Packet
 %% -------------------------------------------------------------------
 
@@ -43,7 +72,9 @@ prop_rst_stream_frame() ->
         {StreamId, ErrorCode},
         {non_zero_stream_id(), error_code()},
         begin
-            ?assertRoundTrip(#rst_stream{stream_id = StreamId, flags = 16#00, error_code = ErrorCode}),
+            ?assertRoundTrip(#rst_stream{
+                stream_id = StreamId, flags = 16#00, error_code = ErrorCode
+            }),
             true
         end
     ).
