@@ -15,6 +15,20 @@
 end).
 
 %% -------------------------------------------------------------------
+%% RST_STREAM Packet
+%% -------------------------------------------------------------------
+
+prop_rst_stream_frame() ->
+    ?FORALL(
+        {StreamId, ErrorCode},
+        {non_zero_stream_id(), error_code()},
+        begin
+            ?assertRoundTrip(#rst_stream{stream_id = StreamId, flags = 16#00, error_code = ErrorCode}),
+            true
+        end
+    ).
+
+%% -------------------------------------------------------------------
 %% SETTINGS Packet
 %% -------------------------------------------------------------------
 
