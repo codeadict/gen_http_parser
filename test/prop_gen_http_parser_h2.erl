@@ -15,6 +15,26 @@
 end).
 
 %% -------------------------------------------------------------------
+%% PRIORITY Packet
+%% -------------------------------------------------------------------
+
+prop_priority_frame() ->
+    ?FORALL(
+        {StreamId, StreamDep, Exclusive, Weight},
+        {non_zero_stream_id(), non_zero_stream_id(), boolean(), pos_integer()},
+        begin
+            ?assertRoundTrip(#priority{
+                stream_id = StreamId,
+                flags = 16#00,
+                is_exclusive = Exclusive,
+                stream_dependency = StreamDep,
+                weight = Weight
+            }),
+            true
+        end
+    ).
+
+%% -------------------------------------------------------------------
 %% RST_STREAM Packet
 %% -------------------------------------------------------------------
 
