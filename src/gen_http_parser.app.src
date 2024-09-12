@@ -3,6 +3,7 @@
     {description, "HTTTP parser for Erlang"},
     {vsn, "0.0.1"},
     {modules, [
+        gen_http_parser_h1,
         gen_http_parser_h2
     ]},
     {registered, []},

@@ -20,13 +20,12 @@
 
 encode_request(Method, Target, Headers, Body) ->
     try
-        Body1 = [
+        {ok, [
             encode_request_line(Method, Target),
             encode_headers(Headers),
             "\r\n",
             encode_body(Body)
-        ],
-        {ok, Body1}
+        ]}
     catch
         throw:{gen_http, Reason}:_Stacktrace ->
             {error, Reason}

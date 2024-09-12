@@ -64,7 +64,7 @@ encode(#data{stream_id = StreamId, flags = Flags, data = Data, padding = undefin
     encode_raw(?PACKET_DATA, Flags, StreamId, Data);
 encode(#data{stream_id = StreamId, flags = Flags, data = Data, padding = Padding}) ->
     Flags1 = set_flags(Flags, data, [padded]),
-    Payload1 = [erlang:byte_size(Padding), Data, Padding],
+    Payload1 = [byte_size(Padding), Data, Padding],
     encode_raw(?PACKET_DATA, Flags1, StreamId, Payload1);
 encode(
     #headers{
@@ -81,8 +81,10 @@ encode(
         case is_falsy(StreamDep) andalso is_falsy(Weight) andalso is_boolean(IsExclusive) of
             true ->
                 IsExclussiveInt = boolean_to_integer(IsExclusive),
-                [<<IsExclussiveInt:1, StreamDep:31>>, Weight - 1, Hbf],
-                set_flags(Flags, headers, [priority]);
+                {
+                    [<<IsExclussiveInt:1, StreamDep:31>>, Weight - 1, Hbf],
+                    set_flags(Flags, headers, [priority])
+                };
             _Other ->
                 {Hbf, Flags}
         end,
