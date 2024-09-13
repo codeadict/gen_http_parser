@@ -1,5 +1,17 @@
 -ifndef(H2_FRAMES_HRL).
 -define(H2_FRAMES_HRL, true).
+
+-define(PACKET_DATA, 0).
+-define(PACKET_HEADERS, 1).
+-define(PACKET_PRIORITY, 2).
+-define(PACKET_RST_STREAM, 3).
+-define(PACKET_SETTINGS, 4).
+-define(PACKET_PUSH_PROMISE, 5).
+-define(PACKET_PING, 6).
+-define(PACKET_GOAWAY, 7).
+-define(PACKET_WINDOW_UPDATE, 8).
+-define(PACKET_CONTINUATION, 9).
+
 -record(data, {stream_id, flags = 16#0, data, padding}).
 -record(headers, {stream_id, flags = 16#0, is_exclusive, stream_dependency, weight, hbf, padding}).
 -record(priority, {stream_id, flags = 16#0, is_exclusive, stream_dependency, weight}).

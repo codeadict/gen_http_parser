@@ -2,17 +2,6 @@
 
 -include("gen_http_h2_frames.hrl").
 
--define(PACKET_DATA, 0).
--define(PACKET_HEADERS, 1).
--define(PACKET_PRIORITY, 2).
--define(PACKET_RST_STREAM, 3).
--define(PACKET_SETTINGS, 4).
--define(PACKET_PUSH_PROMISE, 5).
--define(PACKET_PING, 6).
--define(PACKET_GOAWAY, 7).
--define(PACKET_WINDOW_UPDATE, 8).
--define(PACKET_CONTINUATION, 9).
-
 -define(MAX_FRAME_SIZE, 16384).
 
 -export([
@@ -24,8 +13,6 @@
     encode/1,
     encode_raw/4
 ]).
-
-
 
 -spec encode(packet()) -> iodata().
 encode(#data{stream_id = StreamId, flags = Flags, data = Data, padding = undefined}) ->
