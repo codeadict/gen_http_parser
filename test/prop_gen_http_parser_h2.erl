@@ -50,7 +50,7 @@ prop_data_frame_with_padding() ->
 prop_priority_frame() ->
     ?FORALL(
         {StreamId, StreamDep, Exclusive, Weight},
-        {non_zero_stream_id(), non_zero_stream_id(), boolean(), pos_integer()},
+        {non_zero_stream_id(), non_zero_stream_id(), boolean(), integer(1, 256)},
         begin
             ?assertRoundTrip(#priority{
                 stream_id = StreamId,
